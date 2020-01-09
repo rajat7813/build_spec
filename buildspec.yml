@@ -11,12 +11,13 @@ phases:
     commands:
       - echo Logging in to Amazon ECR...hhhhhh
       - aws --version
-      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+  
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...     
       - docker build -t wipo-test:latest .
+  
   post_build:
     commands:
       - echo Build completed on `date`
