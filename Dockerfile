@@ -55,7 +55,7 @@ CMD ["./bin/standalone.sh", "-b", "0.0.0.0"]
 
 
 #unzip the module 
-RUN unzip ${WILDFLY_HOME}/modules/com.zip -d ${WILDFLY_HOME}/modules/
+#RUN unzip ${WILDFLY_HOME}/modules/com.zip -d ${WILDFLY_HOME}/modules/
 #deploy the war
 
 ### Command to run the container
