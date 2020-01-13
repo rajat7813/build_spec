@@ -22,5 +22,5 @@ phases:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
-      - aws s3 cp Dockerfile s3://wipo-test-vishal-s3/
+      - aws s3 cp Dockerfile s3://sopradevtraining/
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/wipo-test:latest
