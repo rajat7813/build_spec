@@ -23,5 +23,6 @@ phases:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
       - aws s3 cp Dockerfile s3://sopradevtraining/
+      - $(aws ecr get-login --no-include-email --region us-east-1)
       - docker tag wipo-test:latest 114292955443.dkr.ecr.us-east-1.amazonaws.com/build_spec:latest
       - docker push 114292955443.dkr.ecr.us-east-1.amazonaws.com/build_spec:latest
