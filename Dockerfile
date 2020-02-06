@@ -1,11 +1,14 @@
 FROM centos
-MAINTAINER Vishal
 
-# Define wildfly setup
+ENV http_proxy http://10.135.0.29:8080
+ENV https_proxy http://10.135.0.29:8080
+MAINTAINER Rajat Arora
+
+
+
 ARG OPENJDK_VERSION=1.8.0
-ARG WILDFLY_VERSION=11.0.0.Final
-ARG WILDFLY_USER=wildfly
-ARG WILDFLY_PASSWORD=wildfly                   
+ARG TOMCAT_MAJOR=8
+ARG TOMCAT_VERSION=8.5.47
 
 # Ensure root user is used               
 USER root 
@@ -13,50 +16,36 @@ USER root
 RUN yum update -y
 RUN yum install -y sudo
 
-#install unzip utility
-RUN yum install -y unzip
-
 # Install OpenJDK
 RUN yum install -y "java-${OPENJDK_VERSION}-openjdk-devel"
 
+ARG TOMCAT_HOME=/usr/local/tomcat
 
-# Create wildfly service user, then add it to sudoers
-RUN useradd -ms /bin/bash ${WILDFLY_USER}
-RUN usermod -aG wheel ${WILDFLY_USER}
-ARG USER_HOME=/home/${WILDFLY_USER}
- 
+ARG TOMCAT_NAME=apache-tomcat-${TOMCAT_VERSION}
+ARG TOMCAT_FILE=${TOMCAT_NAME}.tar.gz
 
-# Prepare file system for wildfly
-ARG WILDFLY_HOME=/usr/local/wildfly
-ARG WILDFLY_NAME=wildfly-${WILDFLY_VERSION}
-ARG WILDFLY_FILE=${WILDFLY_NAME}.tar.gz
-ARG WILDFLY_URL=https://download.jboss.org/wildfly/${WILDFLY_VERSION}/${WILDFLY_FILE}
-RUN mkdir -p ${WILDFLY_HOME}
-RUN chown -R ${WILDFLY_USER}:${WILDFLY_USER} ${WILDFLY_HOME}
 
- # Install wildfly server
-USER ${WILDFLY_USER}
-WORKDIR ${WILDFLY_HOME}
+ARG TOMCAT_URL=http://mirror.easyname.ch/apache/tomcat/tomcat-${TOMCAT_MAJOR}/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz
+
+RUN mkdir -p ${TOMCAT_HOME}
+RUN mkdir -p /data/iap/logs/
+WORKDIR ${TOMCAT_HOME}
 
 ARG CURL_CMD="curl -k"
-RUN ${CURL_CMD} -O ${WILDFLY_URL}
-RUN tar -xf ${WILDFLY_FILE} --strip-components 1 --directory ${WILDFLY_HOME}
-RUN rm -f ${WILDFLY_FILE}
+RUN ${CURL_CMD} -O ${TOMCAT_URL}
 
+RUN tar -xf ${TOMCAT_FILE} --strip-components 1 --directory ${TOMCAT_HOME}
+RUN rm -f ${TOMCAT_FILE}
 
-ENV DB_CONNECTION_STRING=jdbc:mysql://iap.xxx.eu-central-1.rds.amazonaws.com:3306/IAP1
-ENV DB_USER=root
-ENV DB_PASSWORD=password
+EXPOSE 8080
+EXPOSE 8009
 
-EXPOSE 8082
-CMD ["./bin/standalone.sh", "-b", "0.0.0.0"]
+USER tomcat
+WORKDIR $TOMCAT_HOME
 
+#Copying War FIle
+COPY ecspoc-0.0.1-SNAPSHOT.war ${TOMCAT_HOME}/webapps/
 
+# Launch Tomcat
+CMD ["./bin/catalina.sh", "run"]
 
-
-#unzip the module 
-#RUN unzip ${WILDFLY_HOME}/modules/com.zip -d ${WILDFLY_HOME}/modules/
-#deploy the war
-
-### Command to run the container
-# docker container run -it -e DB_HOST=devsrv3.wipo.int -e DB_PORT=3306 -e DB_NAME=IAP1 -e DB_USER=iap1 -e DB_PASSWORD=4y5vRtU[gK8B -p 8082:8082 iap-business
