@@ -8,7 +8,7 @@ ARG TOMCAT_VERSION=8.5.47
 # Ensure root user is used               
 USER root 
 # Install required libs
-RUN yum update -y
+#RUN yum update -y
 RUN yum install -y sudo
 
 # Install OpenJDK
