@@ -1,10 +1,5 @@
 FROM centos
-
-ENV http_proxy http://10.135.0.29:8080
-ENV https_proxy http://10.135.0.29:8080
 MAINTAINER Rajat Arora
-
-
 
 ARG OPENJDK_VERSION=1.8.0
 ARG TOMCAT_MAJOR=8
