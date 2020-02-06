@@ -8,6 +8,7 @@ ARG TOMCAT_VERSION=8.5.50
 # Ensure root user is used               
 USER root 
 # Install required libs
+RUN dnf clean packages
 RUN yum update -y
 RUN yum install -y sudo
 
