@@ -16,7 +16,7 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...     
-      - docker build -t wipo-test:latest .
+      - docker build -t ecs-test:latest .
   
   post_build:
     commands:
@@ -24,5 +24,5 @@ phases:
       - echo Pushing the Docker image...
       - aws s3 cp Dockerfile s3://sopradevtraining/
       - $(aws ecr get-login --no-include-email --region us-east-1)
-      - docker tag wipo-test:latest 114292955443.dkr.ecr.us-east-1.amazonaws.com/build_spec:latest
+      - docker tag ecs-test:latest 114292955443.dkr.ecr.us-east-1.amazonaws.com/build_spec:latest
       - docker push 114292955443.dkr.ecr.us-east-1.amazonaws.com/build_spec:latest
