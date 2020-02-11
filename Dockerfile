@@ -13,16 +13,7 @@ RUN yum update -y
 RUN yum install -y sudo
 
 
-cd /etc/yum.repos.d/
-
-touch /etc/yum.repos.d/example.repo
-
-echo "[examplerepo]" >> example.repo
-echo "name=Example Repository" >> example.repo
-echo "baseurl=http://mirror.cisp.com/CentOS/6/os/i386/" >> example.repo
-echo "enabled=1" >> example.repo
-echo "gpgcheck=1" >> example.repo
-echo "gpgkey=http://mirror.cisp.com/CentOS/6/os/i386/RPM-GPG-KEY-CentOS-6" >> example.repo
+COPY example.repo /etc/yum.repos.d/
 
 # Install OpenJDK
 RUN sudo yum install -y "java-${OPENJDK_VERSION}-openjdk-devel"
