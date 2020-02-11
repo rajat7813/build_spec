@@ -13,7 +13,7 @@ RUN yum update -y
 RUN yum install -y sudo
 
 # Install OpenJDK
-RUN yum install -y "java-${OPENJDK_VERSION}-openjdk-devel"
+RUN sudo yum install -y "java-${OPENJDK_VERSION}-openjdk-devel"
 
 ARG TOMCAT_HOME=/usr/local/tomcat
 
