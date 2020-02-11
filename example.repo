@@ -1,0 +1,6 @@
+[examplerepo]
+name=Example Repository
+baseurl=http://mirror.cisp.com/CentOS/6/os/i386/
+enabled=1
+gpgcheck=1
+gpgkey=http://mirror.cisp.com/CentOS/6/os/i386/RPM-GPG-KEY-CentOS-6
